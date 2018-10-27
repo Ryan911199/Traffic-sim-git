@@ -114,7 +114,6 @@ class TrafficLight{
         int comp2;
         int i = 0;
         int j;
-        //this is a test to see if git hub is working
         while (time > 0) {
             if (NS[0] == null) {comp1 = 0;}
             else {comp1 = NS[0].getTime();}
