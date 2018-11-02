@@ -6,31 +6,36 @@ class TrafficLight{
         printLight intersection = new printLight();
         boolean Running = true;
         int numOfCars = 5;
-        boolean printEmergency = false;
         boolean nsLight = false;
         boolean ewLight = false;
         Vehicle[] NS = new Vehicle[5];
         Vehicle[] SN = new Vehicle[5];
         Vehicle[] WE = new Vehicle[5];
         Vehicle[] EW = new Vehicle[5];
-        fillLight(numOfCars, NS, printEmergency);
-        fillLight(numOfCars, SN, printEmergency);
-        fillLight(numOfCars, WE, printEmergency);
-        fillLight(numOfCars, EW, printEmergency);
-        printEmergency = true;
+        fillLight(numOfCars, NS);
+        fillLight(numOfCars, SN);
+        fillLight(numOfCars, WE);
+        fillLight(numOfCars, EW);
         intersection.print(nsLight, NS, SN, WE, EW);
-        Run(nsLight, Time, WE, EW);
-        intersection.print(nsLight, NS, SN, WE, EW);
-
+        while (Running == true) {
+	        Run(nsLight, Time, NS, SN);
+	        intersection.print(nsLight, NS, SN, WE, EW);
+	        if (noVehicle(NS, SN, WE, EW)) {
+		        break;
+	        }
+//	        if (emergency(NS, SN, WE, EW)){
+//	        	//TODO
+//	        }
+	        Running = false;
+        }
         Running = false;
     }
-    public void fillLight(int numOfCars, Vehicle[] NS, boolean F) {
+    public void fillLight(int numOfCars, Vehicle[] NS) {
         Random rand = new Random();
         numOfCars--;
         int num = 0;
         while (0 <= numOfCars) {
-            if (F){num = rand.nextInt(4) + 1;}
-            else{num = rand.nextInt(3) + 1;}
+            num = rand.nextInt(3) + 1;
             switch (num) {
                 case 1:
                     Car C = new Car();
@@ -44,10 +49,6 @@ class TrafficLight{
                     Semi S = new Semi();
                     NS[numOfCars] = S;
                     break;
-                case 4:
-                    Emergency E = new Emergency();
-                    NS[numOfCars] = E;
-                    break;
                 default:
                     System.out.println("there was a problem");
                     break;
@@ -55,6 +56,24 @@ class TrafficLight{
             numOfCars--;
         }
         return;
+    }
+    public Vehicle addCar(){
+	    Random rand = new Random();
+	    int num;
+	    num = rand.nextInt(4) + 1;
+	    switch (num) {
+		    case 1:
+			    return new Car();
+		    case 2:
+			    return new Truck();
+		    case 3:
+			    return new Semi();
+		    case 4:
+			    return new Emergency();
+		    default:
+			    System.out.println("there was a problem");
+			    return null;
+	    }
     }
     public boolean noVehicle(Vehicle[] NS, Vehicle[] SN, Vehicle[] WE, Vehicle[] EW){
         int T = 0;
@@ -108,12 +127,15 @@ class TrafficLight{
         }
         return false;
     }
+    public void moveEmergency(Vehicle[] NS, Vehicle[] SN, Vehicle[] WE, Vehicle[] EW){
+
+    }
     public void Run(Boolean nsLight, int Time, Vehicle[] NS, Vehicle[] SN){
         int time = Time;
-        int comp1;
-        int comp2;
+        int comp1 = 0;
+        int comp2 = 0;
         int i = 0;
-        int j;
+        int j = 0;
         while (time > 0) {
             if (NS[0] == null) {comp1 = 0;}
             else {comp1 = NS[0].getTime();}
@@ -134,70 +156,18 @@ class TrafficLight{
             NS[3] = NS[4];
             NS[4] = null;
         }
-        fillLight(1, NS,true);
-//        fillLight(1, SN,true);
-//        while (i < 4){
-//            if (NS[i] == null){
-//                NS[i]= NS[0];
-//                i--;
-//                j = i -1;
-//                while(i > 0){
-//                    NS[i] = NS
-//                }
-//
-//                break;
-//            }
-//            i++;
-//        }
-
-        if (!nsLight){nsLight = true;}
-        else { nsLight = false;}
-
+	    if (comp1 != 0) {
+		    while (NS[i] != null) {
+			    i++;
+		    }
+		    NS[i] = addCar();
+	    }
+	    if (comp2 != 0) {
+		    while (SN[j] != null) {
+			    j++;
+		    }
+		    SN[j] = addCar();
+	    }
     }
 
-
-
-
-
-
-
-
-
-//    Object[] C = NS;
-//    int J = 0;
-//        for (int i = 4; i > 0; i--) {
-//        for (int x = 0; x <= 4; x++) {
-//            C[x] = (" ");
-//        }
-//        J++;
-//        if (J == 1) {
-//            C = SN;
-//        } else if (J == 2) {
-//            C = WE;
-//        } else if (J == 3) {
-//            C = EW;
-//        }
-//    }
-//        intersection.print(nsLight, ewLight, NS, SN, WE, EW);
-//    Boolean Test = noVehicle(NS, SN, WE, EW);
-//        if (Test){
-//        System.out.println("this is to easy");
-//    }
-
-//    if (emergency(NS, SN, WE, EW)){
-//        System.out.println("winning");
-//    }
-//        else if (!emergency(NS, SN, WE, EW)){
-//        System.out.println("this could be good");
-//    }
-//    Emergency E = new Emergency();
-//    NS[1] = E;
-//    NS[0] = " ";
-//        intersection.print(nsLight, ewLight, NS, SN, WE, EW);
-//        if (emergency(NS, SN, WE, EW)){
-//        System.out.println("winning");
-//    }
-//        else if (!emergency(NS, SN, WE, EW)){
-//        System.out.println("this is bad");
-//    }
 }
